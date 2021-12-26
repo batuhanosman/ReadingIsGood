@@ -41,6 +41,8 @@ public class BookServiceImpl implements BookService {
     public BookDTO createBook(CreateBookRequest request) {
         if(Objects.nonNull(bookRepository.findByName(request.getBookCreateDTO().getName())))
             throw new ReadingIsGoodBaseException(ApiErrorConstants.BOOK_ALREADY_EXIST);
+        if(request.getBookCreateDTO().getQty() <= 0)
+            throw new ReadingIsGoodBaseException(ApiErrorConstants.QTY_CANNOT_BE_LESS_THAN_OR_EQUAL_ZERO);
         log.info("Book is Creating {}", request.getBookCreateDTO());
         return bookRepository.save(new Book().fromDTO(request.getBookCreateDTO())).toDTO();
     }

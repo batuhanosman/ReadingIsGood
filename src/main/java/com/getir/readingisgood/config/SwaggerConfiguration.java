@@ -15,7 +15,6 @@ import java.util.Collections;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfiguration implements WebMvcConfigurer {
 
     @Bean

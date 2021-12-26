@@ -25,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
                                                                          HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ApiError error = new ApiError(ex.getMessage(), ApiErrorConstants.REQUEST_METHOD_NOT_SUPPORTED,status, LocalDateTime.now());
+        ApiError error = new ApiError(ApiErrorConstants.REQUEST_METHOD_NOT_SUPPORTED,status, LocalDateTime.now());
         logger.error("Request method not supported error occured. Exception detail: {}", error);
         return ResponseEntity.status(status).body(error);
     }
@@ -33,14 +33,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
                                                                      HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ApiError error = new ApiError(ex.getMessage(), ApiErrorConstants.HTTP_MEDIA_TYPE_NOT_SUPPORTED,status, LocalDateTime.now());
+        ApiError error = new ApiError(ApiErrorConstants.HTTP_MEDIA_TYPE_NOT_SUPPORTED,status, LocalDateTime.now());
         logger.error("Http media type not supported error occured. Exception detail: {}", error);
         return ResponseEntity.status(status).body(error);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> badCredentialsException(BadCredentialsException ex) {
-        ApiError error = new ApiError(ex.getMessage(), ApiErrorConstants.USER_ALREADY_EXIST, HttpStatus.BAD_REQUEST, LocalDateTime.now());
+        ApiError error = new ApiError( ApiErrorConstants.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST, LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ReadingIsGoodBaseException.class)
+    public ResponseEntity<ApiError> bookAlreadyExistException(ReadingIsGoodBaseException ex) {
+        ApiError error = new ApiError(ex.getMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

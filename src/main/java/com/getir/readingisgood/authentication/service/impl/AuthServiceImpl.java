@@ -8,12 +8,11 @@ import com.getir.readingisgood.authentication.service.AuthService;
 import com.getir.readingisgood.constants.ApiErrorConstants;
 import com.getir.readingisgood.entity.Role;
 import com.getir.readingisgood.entity.User;
-import com.getir.readingisgood.exception.RoleIsNotFoundException;
-import com.getir.readingisgood.exception.UserAlreadyExistException;
+import com.getir.readingisgood.exception.ReadingIsGoodBaseException;
 import com.getir.readingisgood.model.enums.ERole;
 import com.getir.readingisgood.repository.RoleRepository;
 import com.getir.readingisgood.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -39,14 +39,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtUtils jwtUtils;
 
-    @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
-        this.jwtUtils = jwtUtils;
-    }
 
     @Override
     public JwtResponse signIn(SigninRequest request) {
@@ -71,11 +63,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User signUp(SignUpRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new UserAlreadyExistException(ApiErrorConstants.USER_ALREADY_EXIST);
+            throw new ReadingIsGoodBaseException(ApiErrorConstants.USER_ALREADY_EXIST);
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserAlreadyExistException(ApiErrorConstants.USER_ALREADY_EXIST);
+            throw new ReadingIsGoodBaseException(ApiErrorConstants.USER_ALREADY_EXIST);
         }
 
         // Create new user's account
@@ -95,13 +87,13 @@ public class AuthServiceImpl implements AuthService {
                 switch (role) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RoleIsNotFoundException(ApiErrorConstants.ROLE_IS_NOT_FOUND));
+                                .orElseThrow(() -> new ReadingIsGoodBaseException(ApiErrorConstants.ROLE_IS_NOT_FOUND));
                         roles.add(adminRole);
 
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RoleIsNotFoundException(ApiErrorConstants.ROLE_IS_NOT_FOUND));
+                                .orElseThrow(() -> new ReadingIsGoodBaseException(ApiErrorConstants.ROLE_IS_NOT_FOUND));
                         roles.add(userRole);
                 }
             });

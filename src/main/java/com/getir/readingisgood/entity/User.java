@@ -13,6 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -23,7 +24,7 @@ import java.util.Set;
 @Document(collection = "users")
 public class User {
     @Id
-    private Long id;
+    private String id;
 
     @NotBlank
     @Size(max = 20)
@@ -38,8 +39,11 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Set<Role> roles = new HashSet<>();
+
+    @DBRef(lazy = true)
+    private List<Order> orders;
 
     public User(String username, String email, String password) {
         this.username = username;

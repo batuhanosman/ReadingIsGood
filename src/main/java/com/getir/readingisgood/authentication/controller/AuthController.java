@@ -10,9 +10,8 @@ import com.getir.readingisgood.entity.User;
 import com.getir.readingisgood.model.response.BaseApiResponse;
 import com.getir.readingisgood.repository.RoleRepository;
 import com.getir.readingisgood.repository.UserRepository;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,8 +24,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = ApiEndPoints.AUTH_API, produces = ApiEndPoints.RESPONSE_CONTENT_TYPE,
         consumes = MediaType.APPLICATION_JSON_VALUE)
-@Api
-@SwaggerDefinition(tags = {@Tag(name = "reading-is-good-auth-api", description = "Authorization Api")})
+@OpenAPIDefinition(tags = {@Tag(name = "reading-is-good-auth-api", description = "Authorization Api")})
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;

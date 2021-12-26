@@ -8,6 +8,7 @@ import com.getir.readingisgood.authentication.service.AuthService;
 import com.getir.readingisgood.constants.ApiErrorConstants;
 import com.getir.readingisgood.entity.Role;
 import com.getir.readingisgood.entity.User;
+import com.getir.readingisgood.exception.RoleIsNotFoundException;
 import com.getir.readingisgood.exception.UserAlreadyExistException;
 import com.getir.readingisgood.model.enums.ERole;
 import com.getir.readingisgood.repository.RoleRepository;
@@ -94,13 +95,13 @@ public class AuthServiceImpl implements AuthService {
                 switch (role) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RoleIsNotFoundException(ApiErrorConstants.ROLE_IS_NOT_FOUND));
                         roles.add(adminRole);
 
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RoleIsNotFoundException(ApiErrorConstants.ROLE_IS_NOT_FOUND));
                         roles.add(userRole);
                 }
             });

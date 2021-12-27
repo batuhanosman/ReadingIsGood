@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,6 +34,7 @@ public class BookController {
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create New Boook", description = "Create New Boook", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<BookDTO> createBook(@Valid @RequestBody CreateBookRequest request){
         log.info("Create Book Request {}", request);
@@ -41,6 +43,7 @@ public class BookController {
 
     @GetMapping(value = "/", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')OR hasRole('USER')")
     @Operation(summary = "Get All Books", description = "Get All Books", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<PageImpl<BookDTO>> getAllBooks(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "20") int pageSize ){
@@ -50,6 +53,7 @@ public class BookController {
 
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update Book", description = "Update Book", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<BookDTO> updateBook(@Valid @RequestBody UpdateBookRequest request){
         log.info("Update Book Request {}", request);

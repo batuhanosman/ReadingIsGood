@@ -35,7 +35,7 @@ public class DatabaseChangeLog {
         userRepository.save(User.builder()
                 .username("user")
                 .password(passwordEncoder.encode("123456"))
-                .email("osman.demirtas95@gmail.com")
+                .email("osman.demirtas1995@gmail.com")
                 .roles(Set.of(roleRepository.findByName(ERole.ROLE_USER).get()))
                 .build());
     }

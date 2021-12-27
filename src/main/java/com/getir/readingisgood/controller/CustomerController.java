@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,6 +31,7 @@ public class CustomerController {
 
     @GetMapping(value = "/", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get My Orders", description = "Get My Orders", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<PageImpl<OrderDTO>> getMyOrders(@RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "20") int pageSize ){

@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +35,7 @@ public class OrderController {
 
     @GetMapping(value = "/{ID}", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get Order By Id", description = "Get Order By Id", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<OrderDTO> getOrderById(@PathVariable("ID") String id){
         log.info("Get All Orders By Date Interval");
@@ -42,6 +44,7 @@ public class OrderController {
 
     @GetMapping(value = "/", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get All Orders By Date Interval", description = "Get All Orders By Date Interval", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<PageImpl<OrderDTO>> getAllOrdersByDateInterval(@RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "20") int pageSize,
@@ -53,6 +56,7 @@ public class OrderController {
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')OR hasRole('USER')")
     @Operation(summary = "Create New Order", description = "Create New Order", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<OrderDTO> createOrder(@Valid @RequestBody CreateOrderRequest request){
         log.info("Create Order Request {}", request);

@@ -35,7 +35,7 @@ public class BookController {
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Create New Boook", description = "Create New Boook", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(summary = "Create New Book", description = "Create New Book", security = {@SecurityRequirement(name = "bearerAuth")})
     public BaseApiResponse<BookDTO> createBook(@Valid @RequestBody CreateBookRequest request){
         log.info("Create Book Request {}", request);
         return new BaseApiResponse(bookService.createBook(request));
